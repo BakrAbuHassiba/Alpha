@@ -1,0 +1,760 @@
+:root {
+  --line: #1b1b1b;
+  --line-soft: #3a3a3a;
+  --outer-line: #111111;
+  --teal: #0b9daa;
+  --paper: #ffffff;
+  --page: #e7eaee;
+  --header-bg: #ececec;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background:
+    linear-gradient(180deg, #f2f5f8 0%, #dfe5ea 100%),
+    repeating-linear-gradient(
+      to right,
+      transparent,
+      transparent 59px,
+      rgba(0, 0, 0, 0.03) 60px
+    );
+  color: #101010;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.timesheet-page {
+  min-height: 100vh;
+  padding: clamp(10px, 2vw, 24px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+}
+
+.app-nav {
+  width: min(100%, 1540px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 clamp(10px, 2vw, 24px);
+  margin-top: clamp(4px, 1vw, 10px);
+}
+
+.app-nav-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2a2a2a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 4px;
+  background: #f8f8f8;
+}
+
+.app-nav-link:hover {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+
+.app-nav-link--active {
+  background: var(--teal);
+  color: #fff;
+  border-color: var(--teal);
+}
+
+.timesheet-sheet {
+  width: min(100%, 1100px);
+  background: var(--paper);
+  border: 2px solid var(--outer-line);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+.timesheet-sheet--wide {
+  width: min(100%, 1540px);
+}
+
+.sheet-header {
+  border-bottom: 1.5px solid var(--line);
+}
+
+.sheet-brand-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 8px;
+  min-height: 112px;
+  padding: 8px 12px 0;
+  border-bottom: 1.5px solid var(--line);
+}
+
+.sheet-company-strip {
+  margin: 0;
+  width: 100%;
+  max-width: 760px;
+  background: var(--teal);
+  color: #ffffff;
+  font-size: 11px;
+  line-height: 1.3;
+  padding: 5px 10px;
+  letter-spacing: 0.2px;
+}
+
+.sheet-logo-wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 0;
+  flex-shrink: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+}
+
+.sheet-logo-wrap img {
+  width: 100%;
+  max-width: 185px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.sheet-info-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+.sheet-title-cell,
+.sheet-field-cell {
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  background: #f7f7f7;
+}
+
+.sheet-title-cell {
+  border-right: 1.5px solid var(--line);
+  padding: 8px 12px;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.sheet-month-cell {
+  padding: 8px 10px;
+}
+
+.sheet-name-cell {
+  border-top: 1.5px solid var(--line);
+  border-right: 1.5px solid var(--line);
+  padding: 8px 10px;
+}
+
+.sheet-person-cell {
+  border-top: 1.5px solid var(--line);
+  padding: 8px 10px;
+}
+
+.sheet-field-cell span {
+  white-space: nowrap;
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.sheet-field-cell input {
+  border: 0;
+  border-bottom: 1px solid #6f6f6f;
+  background: transparent;
+  height: 26px;
+  width: 100%;
+  min-width: 0;
+  padding: 0 4px;
+  font-size: 14px;
+}
+
+.sheet-field-cell input:focus {
+  outline: none;
+  border-bottom-color: var(--teal);
+}
+
+.timesheet-table-section {
+  background: var(--paper);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.timesheet-table {
+  width: 100%;
+  min-width: 0;
+  border-collapse: collapse;
+  border: 2px solid var(--outer-line);
+  table-layout: fixed;
+}
+
+.timesheet-table th,
+.timesheet-table td {
+  border: 1px solid var(--line-soft);
+  padding: 4px 6px;
+  font-size: 13px;
+}
+
+.timesheet-table thead th {
+  background: var(--header-bg);
+  border-top: 1.5px solid var(--line);
+  border-bottom: 1.5px solid var(--line);
+  text-align: center;
+  font-weight: 700;
+  vertical-align: bottom;
+  height: 58px;
+}
+
+.column-hint {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--teal);
+}
+
+.rooms-header-cell {
+  vertical-align: middle;
+}
+
+.sheet-verhaltnis-readonly {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #101010;
+  user-select: none;
+  pointer-events: none;
+}
+
+.timesheet-table tbody td {
+  height: 28px;
+  background: #fdfdfd;
+  border-color: #2f2f2f;
+}
+
+.day-cell {
+  width: 32px;
+  text-align: center;
+  font-weight: 600;
+  background: #f3f3f3;
+}
+
+.signature-cell {
+  width: 170px;
+}
+
+.time-cell {
+  width: 80px;
+}
+
+.num-cell {
+  width: 65px;
+}
+
+.stats-cell {
+  width: 75px;
+}
+
+.hk-split-pair-left,
+.hk-split-pair-right {
+  width: 50px;
+}
+
+.pause-cell {
+  text-align: center;
+  color: #3b3b3b;
+  font-variant-numeric: tabular-nums;
+}
+
+.hours-cell,
+.total-cell,
+.month-total-value {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.timesheet-table input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  height: 24px;
+  padding: 0 2px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.timesheet-table input:focus {
+  outline: 1px solid rgba(11, 157, 170, 0.55);
+  background: #f2fcfd;
+}
+
+.signature-input {
+  text-align: left;
+}
+
+.pause-input,
+.ratio-input {
+  text-align: right;
+}
+
+.month-total-label {
+  text-align: center;
+  font-weight: 700;
+  background: #efefef;
+}
+
+.timesheet-table tfoot td {
+  background: #efefef;
+  height: 30px;
+  border-top: 1.5px solid var(--line);
+  text-align: center;
+}
+
+.timesheet-table tfoot .month-total-value {
+  text-align: center;
+}
+
+.sheet-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 35px 12px 14px;
+  border-top: 1.5px solid var(--line);
+  font-size: 12px;
+}
+
+.signature-line {
+  width: 50%;
+  border-top: 1px solid var(--line);
+  padding-top: 6px;
+}
+
+.sheet-note-wrap {
+  margin-left: auto;
+  text-align: right;
+}
+
+.sheet-abbrev {
+  color: #252525;
+}
+
+.sheet-warning {
+  margin-top: 4px;
+  color: #b81919;
+  font-weight: 700;
+}
+
+.hk-table {
+  min-width: 0;
+}
+
+/* Prevent content from forcing horizontal scroll; truncate cell text where needed. */
+.timesheet-table tbody td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Keep header wrap behavior for long header texts */
+.hk-th-wrap {
+  white-space: normal;
+}
+
+/* Responsive adjustments for narrower viewports (laptops/tablets) */
+@media (max-width: 1400px) {
+  .hk-th-wrap {
+    max-width: 140px;
+    font-size: 10px;
+    padding: 4px 3px;
+  }
+
+  .timesheet-table input {
+    font-size: 12px;
+    padding: 0 2px;
+  }
+
+  .day-cell {
+    width: 36px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .hk-th-wrap {
+    max-width: 110px;
+    font-size: 9px;
+    padding: 3px 2px;
+  }
+
+  .timesheet-table input {
+    font-size: 11px;
+    padding: 0 1px;
+  }
+
+  .day-cell {
+    width: 34px;
+  }
+}
+
+.hk-table thead th {
+  height: auto;
+  min-height: 32px;
+}
+
+.hk-th-wrap {
+  max-width: 200px;
+  white-space: normal;
+  font-size: 11px;
+  line-height: 1.25;
+  padding: 6px 4px;
+  vertical-align: bottom;
+}
+
+.hk-th-merged {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+  background: var(--header-bg);
+}
+
+.hk-th-stacked {
+  vertical-align: bottom;
+}
+
+.hk-repeat-merged {
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 700;
+}
+
+/* One visual block per merged header: no vertical line between mit / ohne pair */
+.hk-table tbody td.hk-split-pair-left {
+  border-right: none;
+}
+
+.hk-table tbody td.hk-split-pair-right {
+  border-left: none;
+}
+
+.hk-table tfoot td.hk-split-pair-left {
+  border-right: none;
+}
+
+.hk-table tfoot td.hk-split-pair-right {
+  border-left: none;
+}
+
+/* Internal separator: draws a vertical line between the mit/ohne pair
+   starting below the header and stopping before the repeated footer labels. */
+.hk-table tbody td.hk-split-pair-left {
+  border-right: none;
+}
+
+/* Draw the separator as a real cell border on the right-side cell so
+   the line covers the white gap and prints cleanly. */
+.hk-table tbody td.hk-split-pair-right,
+.hk-table tfoot td.hk-split-pair-right {
+  border-left: 1px solid var(--line-soft);
+}
+
+.hk-num-input {
+  text-align: right;
+}
+
+.hk-total-empty {
+  background: #efefef;
+}
+
+.hk-gesamtsummen {
+  font-weight: 700;
+  background: #efefef;
+  font-size: 12px;
+  padding: 6px 8px;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.hk-repeat-head-row td {
+  background: var(--header-bg);
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.hk-repeat-header {
+  text-align: center;
+  white-space: normal;
+  line-height: 1.2;
+  padding: 6px 4px;
+  vertical-align: middle;
+}
+
+.hk-repeat-wrap {
+  max-width: 150px;
+}
+
+.hk-footer-note {
+  margin: 0;
+  padding: 12px 12px 16px;
+  color: #b81919;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+  border-top: 1px solid var(--line-soft);
+}
+
+@media (max-width: 980px) {
+  .sheet-brand-row {
+    min-height: 100px;
+  }
+
+  .sheet-title-cell {
+    font-size: 15px;
+  }
+
+  .timesheet-table {
+    min-width: 1060px;
+  }
+  .sheet-logo-wrap img {
+    max-width: 165px;
+  }
+}
+
+@media (max-width: 680px) {
+  .timesheet-page {
+    padding: 8px;
+  }
+
+  .timesheet-sheet {
+    border-width: 1px;
+  }
+
+  .sheet-brand-row {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: auto;
+  }
+
+  .sheet-company-strip {
+    max-width: none;
+    margin: 0;
+  }
+
+  .sheet-logo-wrap {
+    border-top: 0;
+    justify-content: flex-end;
+    margin-top: 4px;
+    margin-bottom: -1px;
+  }
+
+  .sheet-logo-wrap img {
+    max-width: 145px;
+  }
+
+  .sheet-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sheet-title-cell,
+  .sheet-month-cell,
+  .sheet-name-cell,
+  .sheet-person-cell {
+    border-right: 0;
+    border-top: 1.5px solid var(--line);
+  }
+
+  .sheet-title-cell {
+    font-size: 14px;
+  }
+
+  .sheet-field-cell {
+    min-height: 42px;
+  }
+
+  .timesheet-table {
+    min-width: 980px;
+  }
+
+  .timesheet-table th,
+  .timesheet-table td,
+  .timesheet-table input {
+    font-size: 12px;
+  }
+
+  .sheet-bottom {
+    flex-direction: column;
+    text-align: left;
+    gap: 10px;
+    /* padding-top: 100px; */
+  }
+
+  .signature-line {
+    width: 100%;
+  }
+
+  .sheet-note-wrap {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+/* Admin Dashboard Styles */
+.admin-dashboard {
+  width: min(100%, 1540px);
+  padding: 20px;
+  background: #fdfdfd;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin-top: 10px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--teal);
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.back-btn {
+  padding: 8px 16px;
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.admin-section {
+  margin-bottom: 30px;
+}
+
+.admin-section h3 {
+  font-size: 16px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 4px;
+}
+
+.admin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-list-item {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  padding: 12px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-list-item:hover {
+  border-color: var(--teal);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transform: translateY(-1px);
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 700;
+  color: #111;
+  font-size: 15px;
+}
+
+.sheet-period {
+  font-size: 13px;
+  color: #555;
+}
+
+.sheet-employee {
+  font-size: 13px;
+  color: var(--teal);
+  font-weight: 600;
+}
+
+.item-meta {
+  text-align: right;
+  font-size: 12px;
+}
+
+.status-submitted {
+  color: #2e7d32;
+  font-weight: 600;
+  background: #e8f5e9;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.status-active {
+  color: #f57c00;
+  font-weight: 600;
+  background: #fff3e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.empty-msg {
+  color: #999;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.admin-status {
+  padding: 40px;
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+}
+
+.admin-status.error {
+  color: #d32f2f;
+}
+
+@media (max-width: 1000px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
