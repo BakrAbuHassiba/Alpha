@@ -1,12 +1,14 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "change-me-in-production-use-env"
+# Security
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-local-test-key")
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-DEBUG = True
-
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOST_ENV = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1")
+ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOST_ENV.split(",")]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -82,10 +84,8 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:5173",
-    "http://localhost:5173",
-]
+CORS_ALLOWED_ORIGINS_ENV = os.environ.get("CORS_ALLOWED_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173")
+CORS_ALLOWED_ORIGINS = [o.strip() for o in CORS_ALLOWED_ORIGINS_ENV.split(",")]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [

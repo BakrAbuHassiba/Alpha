@@ -1,5 +1,7 @@
+const apiBase = (import.meta.env.VITE_API_BASE || "").replace(/\/$/, "");
+
 export const login = async (username, password) => {
-  const response = await fetch("http://127.0.0.1:8000/api/login/", {
+  const response = await fetch(`${apiBase}/api/login/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -14,7 +16,7 @@ export const login = async (username, password) => {
 };
 
 export const fetchActiveTimesheet = async (token) => {
-  const response = await fetch("http://127.0.0.1:8000/api/timesheet/active/", {
+  const response = await fetch(`${apiBase}/api/timesheet/active/`, {
     headers: { Authorization: `Token ${token}` },
   });
   if (!response.ok) return null;
@@ -22,7 +24,7 @@ export const fetchActiveTimesheet = async (token) => {
 };
 
 export const saveActiveTimesheet = async (token, month, year, employee_name, pers_nr, data) => {
-  const response = await fetch("http://127.0.0.1:8000/api/timesheet/active/", {
+  const response = await fetch(`${apiBase}/api/timesheet/active/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -36,7 +38,7 @@ export const saveActiveTimesheet = async (token, month, year, employee_name, per
 
 export const fetchActiveHousekeeping = async (token) => {
   const response = await fetch(
-    "http://127.0.0.1:8000/api/housekeeping-log/active/",
+    `${apiBase}/api/housekeeping-log/active/`,
     {
       headers: { Authorization: `Token ${token}` },
     }
@@ -47,7 +49,7 @@ export const fetchActiveHousekeeping = async (token) => {
 
 export const saveActiveHousekeeping = async (token, month, year, employee_name, pers_nr, data) => {
   const response = await fetch(
-    "http://127.0.0.1:8000/api/housekeeping-log/active/",
+    `${apiBase}/api/housekeeping-log/active/`,
     {
       method: "POST",
       headers: {
@@ -62,7 +64,7 @@ export const saveActiveHousekeeping = async (token, month, year, employee_name, 
 };
 
 export const submitTimesheet = async (token, month, year, employee_name, pers_nr, data) => {
-  const response = await fetch("http://127.0.0.1:8000/api/timesheet/submit/", {
+  const response = await fetch(`${apiBase}/api/timesheet/submit/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -76,7 +78,7 @@ export const submitTimesheet = async (token, month, year, employee_name, pers_nr
 
 export const submitHousekeepingLog = async (token, month, year, employee_name, pers_nr, data) => {
   const response = await fetch(
-    "http://127.0.0.1:8000/api/housekeeping-log/submit/",
+    `${apiBase}/api/housekeeping-log/submit/`,
     {
       method: "POST",
       headers: {
@@ -91,7 +93,7 @@ export const submitHousekeepingLog = async (token, month, year, employee_name, p
 };
 
 export const fetchUserProfile = async (token) => {
-  const response = await fetch("http://127.0.0.1:8000/api/me/", {
+  const response = await fetch(`${apiBase}/api/me/`, {
     headers: { Authorization: `Token ${token}` },
   });
   if (!response.ok) return null;
@@ -99,7 +101,7 @@ export const fetchUserProfile = async (token) => {
 };
 
 export const fetchAdminDashboard = async (token) => {
-  const response = await fetch("http://127.0.0.1:8000/api/admin/dashboard/", {
+  const response = await fetch(`${apiBase}/api/admin/dashboard/`, {
     headers: { Authorization: `Token ${token}` },
   });
   if (!response.ok) throw new Error("Unauthorized or server error");
