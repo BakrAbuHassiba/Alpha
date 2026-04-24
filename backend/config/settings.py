@@ -5,11 +5,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-local-test-key")
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+#DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = False
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 
-ALLOWED_HOST_ENV = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1")
-ALLOWED_HOSTS = [h.strip() for h in ALLOWED_HOST_ENV.split(",")]
 
+ALLOWED_HOST_ENV = os.environ.get("ALLOWED_HOSTS")
+ALLOWED_HOSTS = [
+    "backend.alfagruppe.de",
+    "app.alfagruppe.de",
+    "127.0.0.1",
+    "localhost",
+]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -84,8 +93,12 @@ USE_TZ = True
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS_ENV = os.environ.get("CORS_ALLOWED_ORIGINS", "http://127.0.0.1:5173,http://localhost:5173")
-CORS_ALLOWED_ORIGINS = [o.strip() for o in CORS_ALLOWED_ORIGINS_ENV.split(",")]
+CORS_ALLOWED_ORIGINS_ENV = os.environ.get("CORS_ALLOWED_ORIGINS")
+#CORS_ALLOWED_ORIGINS = [o.strip() for o in CORS_ALLOWED_ORIGINS_ENV.split(",")]
+CORS_ALLOWED_ORIGINS = [
+    "https://app.alfagruppe.de",
+    "http://app.alfagruppe.de",
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
