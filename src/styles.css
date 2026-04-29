@@ -758,3 +758,52 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* Row Locking Feature Styles */
+.lock-cell {
+  width: 50px;
+  text-align: center;
+  vertical-align: middle;
+  background: #f8f8f8;
+}
+
+.row-lock-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.row-lock-btn:hover:not(:disabled) {
+  background-color: rgba(11, 157, 170, 0.1);
+  transform: scale(1.1);
+}
+
+.row-lock-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+.row-lock-btn.locked {
+  color: var(--teal);
+}
+
+.row-locked {
+  background-color: #fcfcfc !important;
+}
+
+.row-locked td {
+  background-color: #fcfcfc !important;
+}
+
+.row-locked input {
+  color: #666;
+  font-style: italic;
+}

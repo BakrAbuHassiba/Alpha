@@ -10,6 +10,8 @@ from .views import (
     ActiveHousekeepingView,
     UserMeView,
     AdminDashboardView,
+    AdminUpdateTimesheetView,
+    AdminUpdateHousekeepingView,
 )
 
 urlpatterns = [
@@ -41,5 +43,15 @@ urlpatterns = [
         "housekeeping-log/submit/",
         HousekeepingSubmissionView.as_view(),
         name="housekeeping-log-submit",
+    ),
+    path(
+        "timesheet/<int:pk>/update/",
+        AdminUpdateTimesheetView.as_view(),
+        name="admin-timesheet-update",
+    ),
+    path(
+        "housekeeping-log/<int:pk>/update/",
+        AdminUpdateHousekeepingView.as_view(),
+        name="admin-housekeeping-update",
     ),
 ]

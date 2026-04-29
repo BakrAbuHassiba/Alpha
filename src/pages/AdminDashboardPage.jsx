@@ -97,19 +97,23 @@ export default function AdminDashboardPage({ token }) {
           <div className="timesheet-sheet timesheet-sheet--wide" style={{ marginTop: 20 }}>
             {selectedSheet.type === "timesheet" ? (
               <TimesheetTable 
+                key={`ts-${selectedSheet.item.id}`}
                 hotelName={tsSettings.hotel_name} 
                 verhaltnis={tsSettings.verhaltnis} 
                 token={token}
                 initialData={selectedSheet.item}
-                readOnly={true}
+                readOnly={false}
+                isAdmin={true}
               />
             ) : (
               <HousekeepingLogTable 
+                key={`hk-${selectedSheet.item.id}`}
                 hotelName={hkSettings.hotel_name} 
                 config={hkSettings} 
                 token={token}
                 initialData={selectedSheet.item}
-                readOnly={true}
+                readOnly={false}
+                isAdmin={true}
               />
             )}
           </div>

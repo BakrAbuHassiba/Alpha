@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { submitTimesheet, fetchActiveTimesheet, saveActiveTimesheet } from "../api/auth";
+import { submitTimesheet, fetchActiveTimesheet, saveActiveTimesheet, updateTimesheetById } from "../api/auth";
 import TimesheetHeader from "./TimesheetHeader";
 
 const DAYS_IN_MONTH = 31;
@@ -12,6 +12,7 @@ const generateDays = () => {
     pause: "0.30",
     rooms: "",
     signature: "",
+    isLocked: false,
   }));
 };
 
@@ -108,7 +109,7 @@ const formatMinutesAsHourValue = (totalMinutes) => {
   return `${hours},${String(minutes).padStart(2, "0")}`;
 };
 
-export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initialData = null, readOnly = false }) {
+export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initialData = null, readOnly = false, isAdmin = false }) {
   const [rows, setRows] = useState(() => (initialData?.data?.length > 0 ? initialData.data : generateDays()));
   const [month, setMonth] = useState(initialData?.month || "");
   const [year, setYear] = useState(() => initialData?.year || new Date().getFullYear().toString());
@@ -125,11 +126,13 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
 
   // Load draft on mount
   useEffect(() => {
-    if (readOnly) return;
+    if (readOnly || initialData) return;
     let active = true;
     fetchActiveTimesheet(token).then((data) => {
       if (active && data) {
-        if (data.data && data.data.length > 0) setRows(data.data);
+        if (data.data && data.data.length > 0) {
+          setRows(data.data);
+        }
         if (data.month) setMonth(data.month);
         if (data.year) setYear(data.year);
         if (data.employee_name) setEmployeeName(data.employee_name);
@@ -144,10 +147,14 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
   useEffect(() => {
     if (!isLoaded || readOnly) return;
     const timeoutId = setTimeout(() => {
-      saveActiveTimesheet(token, month, year, employeeName, persNr, rows);
+      if (isAdmin && initialData?.id) {
+        updateTimesheetById(token, initialData.id, month, year, employeeName, persNr, rows);
+      } else {
+        saveActiveTimesheet(token, month, year, employeeName, persNr, rows);
+      }
     }, 1000); // 1s debounce
     return () => clearTimeout(timeoutId);
-  }, [rows, month, year, employeeName, persNr, isLoaded, token, readOnly]);
+  }, [rows, month, year, employeeName, persNr, isLoaded, token, readOnly, isAdmin, initialData]);
 
   const handleSubmit = async () => {
     if (!month.trim() || !year.trim() || !employeeName.trim() || !persNr.trim()) {
@@ -193,6 +200,14 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
     setRows((currentRows) => {
       const updatedRows = [...currentRows];
       updatedRows[index] = { ...updatedRows[index], [field]: value };
+      return updatedRows;
+    });
+  };
+
+  const toggleRowLock = (index) => {
+    setRows((currentRows) => {
+      const updatedRows = [...currentRows];
+      updatedRows[index] = { ...updatedRows[index], isLocked: !updatedRows[index].isLocked };
       return updatedRows;
     });
   };
@@ -290,6 +305,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
               </th>
               <th className="stats-cell">Std. gesamt</th>
               <th className="signature-cell">Unterschrift Kunde</th>
+              <th className="lock-cell">Aktion</th>
             </tr>
           </thead>
 
@@ -302,8 +318,17 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
               );
               const stdGesamt = calculateStdGesamt(row.rooms, verhaltnis);
 
+              // Logic: Row is editable if:
+              // 1. It's the first row (index 0)
+              // 2. OR the previous row is locked
+              // 3. AND the current row is NOT locked
+              // 4. OR the user is an admin
+              const isPrevLocked = index === 0 || rows[index - 1].isLocked;
+              const isEditable = isAdmin || (isPrevLocked && !row.isLocked);
+              const fieldDisabled = readOnly || !isEditable;
+
               return (
-                <tr key={row.day}>
+                <tr key={row.day} className={row.isLocked ? "row-locked" : ""}>
                   <td className="day-cell">{row.day}</td>
 
                   <td>
@@ -316,7 +341,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
                       onChange={(event) =>
                         handleChange(index, "start", event.target.value)
                       }
-                      disabled={readOnly}
+                      disabled={fieldDisabled}
                       aria-label={`Tag ${row.day} Uhrzeit von`}
                     />
                   </td>
@@ -331,7 +356,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
                       onChange={(event) =>
                         handleChange(index, "end", event.target.value)
                       }
-                      disabled={readOnly}
+                      disabled={fieldDisabled}
                       aria-label={`Tag ${row.day} Uhrzeit bis`}
                     />
                   </td>
@@ -349,7 +374,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
                         handleChange(index, "pause", event.target.value)
                       }
                       onBlur={() => handlePauseBlur(index)}
-                      disabled={readOnly}
+                      disabled={fieldDisabled}
                       aria-label={`Tag ${row.day} Pause`}
                     />
                   </td>
@@ -369,7 +394,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
                       onChange={(event) =>
                         handleChange(index, "rooms", event.target.value)
                       }
-                      disabled={readOnly}
+                      disabled={fieldDisabled}
                       aria-label={`Tag ${row.day} Gereinigte Zimmer`}
                     />
                   </td>
@@ -384,9 +409,20 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
                       onChange={(event) =>
                         handleChange(index, "signature", event.target.value)
                       }
-                      disabled={readOnly}
+                      disabled={fieldDisabled}
                       aria-label={`Tag ${row.day} Unterschrift Kunde`}
                     />
+                  </td>
+                  <td className="lock-cell">
+                    <button 
+                      type="button"
+                      className={`row-lock-btn ${row.isLocked ? "locked" : ""}`}
+                      onClick={() => toggleRowLock(index)}
+                      disabled={readOnly || (!isAdmin && (row.isLocked || !isPrevLocked))}
+                      title={row.isLocked ? (isAdmin ? "Bearbeiten" : "Bestätigt") : "Bestätigen"}
+                    >
+                      {row.isLocked ? "✅" : "✔️"}
+                    </button>
                   </td>
                 </tr>
               );
@@ -406,6 +442,7 @@ export default function TimesheetTable({ hotelName, verhaltnis = 1, token, initi
               </td>
               <td className="month-total-value">{formatGerman(totalRooms)}</td>
               <td className="month-total-value">{formatGerman(totalMonth)}</td>
+              <td></td>
               <td></td>
             </tr>
           </tfoot>

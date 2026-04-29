@@ -13,6 +13,7 @@ CSRF_COOKIE_SECURE = True
 CSRF_TRUSTED_ORIGINS = [
     "https://app.alfagruppe.de:444",
     "https://backend.alfagruppe.de:444",
+    "http://localhost:8000"
 ]
 
 ALLOWED_HOST_ENV = os.environ.get("ALLOWED_HOSTS")
@@ -102,8 +103,10 @@ CORS_ALLOWED_ORIGINS_ENV = os.environ.get("CORS_ALLOWED_ORIGINS")
 CORS_ALLOWED_ORIGINS = [
     "https://app.alfagruppe.de:444",
     "http://app.alfagruppe.de",
-    "https://app.alfagruppe.de",  # للاحتياط مستقبلاً
-    "https://backend.alfagruppe.de:444", # في حال كنت تفتح الـ API مباشرة
+    "https://app.alfagruppe.de", 
+    "https://backend.alfagruppe.de:444",
+    "http://localhost:5173",
+    "http://localhost:8000"
 ]
 CORS_ALLOW_CREDENTIALS = True
 

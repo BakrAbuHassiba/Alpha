@@ -185,3 +185,46 @@ class AdminDashboardView(APIView):
             "submitted_timesheets": sub_timesheets,
             "submitted_housekeeping": sub_housekeeping,
         })
+
+
+class AdminUpdateTimesheetView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, pk):
+        # Try finding in Active first, then Submitted
+        obj = ActiveTimesheet.objects.filter(pk=pk).first()
+        if not obj:
+            obj = TimesheetSubmission.objects.filter(pk=pk).first()
+        
+        if not obj:
+            return Response({"error": "Sheet not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+        obj.month = request.data.get("month", obj.month)
+        obj.year = request.data.get("year", obj.year)
+        obj.employee_name = request.data.get("employee_name", obj.employee_name)
+        obj.pers_nr = request.data.get("pers_nr", obj.pers_nr)
+        obj.data = request.data.get("data", obj.data)
+        obj.save()
+        
+        return Response({"status": "ok"})
+
+
+class AdminUpdateHousekeepingView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def post(self, request, pk):
+        obj = ActiveHousekeeping.objects.filter(pk=pk).first()
+        if not obj:
+            obj = HousekeepingSubmission.objects.filter(pk=pk).first()
+            
+        if not obj:
+            return Response({"error": "Log not found"}, status=status.HTTP_404_NOT_FOUND)
+            
+        obj.month = request.data.get("month", obj.month)
+        obj.year = request.data.get("year", obj.year)
+        obj.employee_name = request.data.get("employee_name", obj.employee_name)
+        obj.pers_nr = request.data.get("pers_nr", obj.pers_nr)
+        obj.data = request.data.get("data", obj.data)
+        obj.save()
+        
+        return Response({"status": "ok"})

@@ -63,6 +63,32 @@ export const saveActiveHousekeeping = async (token, month, year, employee_name, 
   return response.ok;
 };
 
+export const updateTimesheetById = async (token, id, month, year, employee_name, pers_nr, data) => {
+  const response = await fetch(`${apiBase}/api/timesheet/${id}/update/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify({ month, year, employee_name, pers_nr, data }),
+  });
+  if (!response.ok) throw new Error("Update failed");
+  return response.ok;
+};
+
+export const updateHousekeepingById = async (token, id, month, year, employee_name, pers_nr, data) => {
+  const response = await fetch(`${apiBase}/api/housekeeping-log/${id}/update/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Token ${token}`,
+    },
+    body: JSON.stringify({ month, year, employee_name, pers_nr, data }),
+  });
+  if (!response.ok) throw new Error("Update failed");
+  return response.ok;
+};
+
 export const submitTimesheet = async (token, month, year, employee_name, pers_nr, data) => {
   const response = await fetch(`${apiBase}/api/timesheet/submit/`, {
     method: "POST",
